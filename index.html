@@ -56,10 +56,10 @@
         }
 
         /* --- ESTILOS DO PLAYER CUSTOMIZADO --- */
-        #player-container {
+        .player-container {
             position: relative;
         }
-        #custom-controls {
+        .custom-controls {
             position: absolute;
             bottom: 0;
             left: 0;
@@ -70,11 +70,11 @@
             transition: opacity 0.3s ease-in-out;
             visibility: hidden;
         }
-        #player-container:hover #custom-controls {
+        .player-container:hover .custom-controls {
             opacity: 1;
             visibility: visible;
         }
-        #progress-bar {
+        .progress-bar {
             -webkit-appearance: none;
             appearance: none;
             width: 100%;
@@ -84,7 +84,7 @@
             outline: none;
             border-radius: 5px;
         }
-        #progress-bar::-webkit-slider-thumb {
+        .progress-bar::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 15px;
@@ -93,7 +93,7 @@
             border-radius: 50%;
             cursor: pointer;
         }
-        #progress-bar::-moz-range-thumb {
+        .progress-bar::-moz-range-thumb {
             width: 15px;
             height: 15px;
             background: #fbbf24;
@@ -106,12 +106,12 @@
 
     <!-- Cabeçalho de Navegação -->
     <header class="bg-black/70 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 border-b border-gray-800">
-        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+        <div class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
             <!-- Logo -->
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2 md:space-x-3">
                 <img src="https://www.cmembu.sp.gov.br/assets/images/brasao_embu_das_artes_alpha_025.webp" alt="Brasão de Embu das Artes" class="w-10 h-10">
-                <h1 class="text-xl font-bold text-white tracking-wider uppercase">
-                    TV CÂMARA <span class="font-light text-gray-400">EMBU DAS ARTES</span>
+                <h1 class="text-base sm:text-xl font-bold text-white tracking-wider uppercase">
+                    TV CÂMARA <span class="font-light text-gray-400 hidden sm:inline">EMBU DAS ARTES</span>
                 </h1>
             </div>
 
@@ -142,44 +142,53 @@
         </nav>
     </div>
 
-    <main class="pt-24">
-        <!-- Seção AO VIVO com player redimensionado -->
-        <section id="ao-vivo" class="container mx-auto px-6 mb-16">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+    <main class="pt-20 sm:pt-24">
+        <!-- Seção AO VIVO com layout mobile otimizado -->
+        <section id="ao-vivo" class="mb-12 md:mb-16">
+            <!-- Container para o layout Desktop -->
+            <div class="hidden lg:grid lg:grid-cols-3 lg:gap-8 lg:items-center lg:container lg:mx-auto">
                 <!-- Player de Vídeo com Controles Customizados -->
-                <div id="player-container" class="lg:col-span-2 w-full aspect-video bg-gray-900 rounded-lg shadow-2xl shadow-black/50 overflow-hidden">
-                    <!-- O IFrame do YouTube será inserido aqui pelo JavaScript -->
-                    <div id="player"></div>
+                <div id="player-container-desktop" class="player-container lg:col-span-2 w-full aspect-video bg-gray-900 lg:rounded-lg shadow-2xl shadow-black/50 overflow-hidden">
+                    <div id="player-desktop"></div>
                     <!-- Controles customizados -->
-                    <div id="custom-controls">
-                        <input type="range" id="progress-bar" value="0" min="0">
-                        <div class="flex items-center justify-between mt-2 px-2">
-                            <div class="flex items-center space-x-4">
-                                <button id="play-pause-btn" class="text-white text-xl"><i class="fas fa-play"></i></button>
-                                <div class="flex items-center space-x-2 group">
-                                    <button id="mute-btn" class="text-white text-xl"><i class="fas fa-volume-high"></i></button>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <span id="current-time" class="text-white text-sm font-mono">00:00</span>
-                                <span class="text-white text-sm font-mono">/</span>
-                                <span id="duration" class="text-white text-sm font-mono">00:00</span>
-                                <button id="fullscreen-btn" class="text-white text-xl"><i class="fas fa-expand"></i></button>
-                            </div>
-                        </div>
+                    <div id="custom-controls-desktop" class="custom-controls">
+                        <!-- Conteúdo dos controles gerado via JS -->
                     </div>
                 </div>
-
-                <!-- Informações da Transmissão (Conteúdo Dinâmico) -->
-                <div class="text-center lg:text-left">
-                    <span id="live-indicator" class="inline-block bg-red-600 px-4 py-1 rounded-md text-sm font-bold items-center space-x-2 animate-pulse-live w-fit mx-auto lg:mx-0 hidden">
+                 <!-- Informações da Transmissão -->
+                 <div class="text-center lg:text-left">
+                    <span id="live-indicator-desktop" class="inline-block bg-red-600 px-4 py-1 rounded-md text-sm font-bold items-center space-x-2 animate-pulse-live w-fit mx-auto lg:mx-0 hidden">
                         <svg class="w-3 h-3 inline-block" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4"/></svg>
                         <span>AO VIVO</span>
                     </span>
-                    <h2 id="session-title" class="text-3xl md:text-4xl font-bold mt-4 text-white">Carregando programação...</h2>
-                    <p id="session-description" class="text-gray-400 mt-2">Por favor, aguarde.</p>
-                    <button id="session-button" class="mt-6 bg-amber-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-amber-300 transition-all w-full sm:w-auto">
-                        Ver Pauta do Dia
+                    <h2 id="session-title-desktop" class="text-3xl md:text-4xl font-bold mt-4 text-white">Carregando...</h2>
+                    <p id="session-description-desktop" class="text-gray-400 mt-2">Aguarde.</p>
+                    <button id="session-button-desktop" class="mt-6 bg-amber-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-amber-300 transition-all w-full sm:w-auto">
+                        Ver Pauta
+                    </button>
+                </div>
+            </div>
+
+            <!-- Container para o layout Mobile -->
+            <div class="lg:hidden">
+                <!-- Player de Vídeo de ponta a ponta -->
+                <div id="player-container-mobile" class="player-container w-full aspect-video bg-gray-900 shadow-lg shadow-black/50 overflow-hidden">
+                    <div id="player-mobile"></div>
+                     <!-- Controles customizados -->
+                     <div id="custom-controls-mobile" class="custom-controls">
+                        <!-- Conteúdo dos controles gerado via JS -->
+                    </div>
+                </div>
+                <!-- Informações abaixo do player -->
+                <div class="text-center px-6 mt-6">
+                    <span id="live-indicator-mobile" class="inline-block bg-red-600 px-4 py-1 rounded-md text-sm font-bold items-center space-x-2 animate-pulse-live w-fit mx-auto hidden">
+                        <svg class="w-3 h-3 inline-block" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4"/></svg>
+                        <span>AO VIVO</span>
+                    </span>
+                    <h2 id="session-title-mobile" class="text-3xl font-bold mt-4 text-white">Carregando...</h2>
+                    <p id="session-description-mobile" class="text-gray-400 mt-2">Aguarde.</p>
+                    <button id="session-button-mobile" class="mt-6 bg-amber-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-amber-300 transition-all w-full sm:w-auto">
+                        Ver Pauta
                     </button>
                 </div>
             </div>
@@ -191,7 +200,7 @@
             <!-- Carrossel: Adicionados Recentemente -->
             <section id="recentes">
                 <h3 class="text-2xl font-semibold mb-6 text-white border-l-4 border-amber-400 pl-4">Vídeos Recentes</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                     <!-- Vídeo Card -->
                     <div class="bg-gray-900 rounded-lg overflow-hidden video-card cursor-pointer group">
                         <img src="https://placehold.co/400x225/111827/fcd34d?text=Saúde" alt="Thumbnail" class="w-full h-auto object-cover">
@@ -228,7 +237,7 @@
             <!-- Carrossel: Sessões Plenárias -->
             <section id="sessoes">
                 <h3 class="text-2xl font-semibold mb-6 text-white border-l-4 border-amber-400 pl-4">Sessões Plenárias na Íntegra</h3>
-                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                 <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                     <!-- Vídeo Card -->
                     <div class="bg-gray-900 rounded-lg overflow-hidden video-card cursor-pointer group">
                         <img src="https://placehold.co/400x225/1f2937/9ca3af?text=Sessão+07/10" alt="Thumbnail" class="w-full h-auto object-cover">
@@ -288,35 +297,32 @@
         });
 
         // --- LÓGICA DO CONTEÚDO DINÂMICO ---
-        function updateSessionInfo() {
+        function updateSessionInfo(isMobile) {
             const now = new Date();
-            const dayOfWeek = now.getDay(); // 0 (Domingo) a 6 (Sábado)
+            const dayOfWeek = now.getDay();
             const hour = now.getHours();
 
-            const titleEl = document.getElementById('session-title');
-            const descEl = document.getElementById('session-description');
-            const buttonEl = document.getElementById('session-button');
-            const liveIndicator = document.getElementById('live-indicator');
+            const suffix = isMobile ? '-mobile' : '-desktop';
+            const titleEl = document.getElementById('session-title' + suffix);
+            const descEl = document.getElementById('session-description' + suffix);
+            const buttonEl = document.getElementById('session-button' + suffix);
+            const liveIndicator = document.getElementById('live-indicator' + suffix);
             
-            // Exemplo de programação: Sessão toda Quarta-feira, das 10h às 14h
-            const isSessionDay = dayOfWeek === 3; // Quarta-feira
+            const isSessionDay = dayOfWeek === 3;
             const isSessionTime = hour >= 10 && hour < 14;
 
             if (isSessionDay && isSessionTime) {
-                // Durante a sessão
                 liveIndicator.classList.remove('hidden');
                 liveIndicator.classList.add('inline-flex');
                 titleEl.textContent = 'Sessão Plenária';
                 descEl.textContent = 'Acompanhe a discussão e votação de projetos importantes para a nossa cidade.';
                 buttonEl.textContent = 'Ver Pauta do Dia';
             } else if (isSessionDay && hour >= 8 && hour < 10) {
-                // Antes da sessão
                 liveIndicator.classList.add('hidden');
                 titleEl.textContent = 'A Seguir: Sessão Plenária';
                 descEl.textContent = 'A transmissão ao vivo começará em breve, a partir das 10:00.';
                 buttonEl.textContent = 'Ver Pauta do Dia';
             } else {
-                // Fora do horário da sessão
                 liveIndicator.classList.add('hidden');
                 titleEl.textContent = 'Veja a Última Sessão';
                 descEl.textContent = 'Assista à gravação da última sessão plenária na íntegra quando quiser.';
@@ -324,122 +330,143 @@
             }
         }
         
-        // --- LÓGICA DO PLAYER DE VÍDEO CUSTOMIZADO ---
-        let player;
-        let videoId = 'FNSdHB0yd1c'; // ID do vídeo do YouTube (ATUALIZADO PARA A NOVA LIVE)
+        // --- LÓGICA DO PLAYER DE VÍDEO ---
+        let playerDesktop, playerMobile;
+        const videoId = 'FNSdHB0yd1c';
+        let progressIntervals = {};
 
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
+            playerDesktop = createPlayer('player-desktop', false);
+            playerMobile = createPlayer('player-mobile', true);
+        }
+
+        function createPlayer(playerId, isMobile) {
+            return new YT.Player(playerId, {
                 height: '100%',
                 width: '100%',
                 videoId: videoId,
                 playerVars: {
-                    'autoplay': 1,
-                    'controls': 0, // Desabilita os controles padrão do YouTube
-                    'rel': 0,
-                    'showinfo': 0,
-                    'loop': 1,
-                    'playlist': videoId,
-                    'iv_load_policy': 3,
-                    'mute': 1
+                    'autoplay': 1, 'controls': 0, 'rel': 0, 'showinfo': 0, 
+                    'loop': 1, 'playlist': videoId, 'iv_load_policy': 3, 'mute': 1
                 },
                 events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
+                    'onReady': (event) => onPlayerReady(event, isMobile),
+                    'onStateChange': (event) => onPlayerStateChange(event, isMobile)
                 }
             });
         }
 
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const muteBtn = document.getElementById('mute-btn');
-        const fullscreenBtn = document.getElementById('fullscreen-btn');
-        const progressBar = document.getElementById('progress-bar');
-        const currentTimeEl = document.getElementById('current-time');
-        const durationEl = document.getElementById('duration');
-        let progressInterval;
-
-        function onPlayerReady(event) {
-            updateProgressBar();
-            updateDuration();
-            event.target.playVideo();
+        function onPlayerReady(event, isMobile) {
+            const player = event.target;
+            setupPlayerControls(player, isMobile);
+            updateDuration(player, isMobile);
+            player.playVideo();
         }
 
-        function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING) {
+        function onPlayerStateChange(event, isMobile) {
+            const suffix = isMobile ? '-mobile' : '-desktop';
+            const playPauseBtn = document.getElementById('play-pause-btn' + suffix);
+            clearInterval(progressIntervals[suffix]);
+
+            if (event.data === YT.PlayerState.PLAYING) {
                 playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                progressInterval = setInterval(updateProgressBar, 1000);
+                progressIntervals[suffix] = setInterval(() => updateProgressBar(event.target, isMobile), 1000);
             } else {
                 playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                clearInterval(progressInterval);
             }
         }
 
-        // Funções de controle
-        playPauseBtn.addEventListener('click', () => {
-            const playerState = player.getPlayerState();
-            if (playerState == YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-            } else {
-                player.playVideo();
-            }
-        });
+        function setupPlayerControls(player, isMobile) {
+            const suffix = isMobile ? '-mobile' : '-desktop';
+            const playerContainer = document.getElementById('player-container' + suffix);
+            const controlsContainer = document.getElementById('custom-controls' + suffix);
+            
+            controlsContainer.innerHTML = `
+                <input type="range" id="progress-bar${suffix}" value="0" min="0" class="progress-bar">
+                <div class="flex items-center justify-between mt-2 px-2">
+                    <div class="flex items-center space-x-4">
+                        <button id="play-pause-btn${suffix}" class="text-white text-xl"><i class="fas fa-play"></i></button>
+                        <button id="mute-btn${suffix}" class="text-white text-xl"><i class="fas fa-volume-high"></i></button>
+                    </div>
+                    <div class="flex items-center space-x-2 text-white text-sm font-mono">
+                        <span id="current-time${suffix}">00:00</span>
+                        <span>/</span>
+                        <span id="duration${suffix}">00:00</span>
+                    </div>
+                    <div class="flex items-center">
+                        <button id="fullscreen-btn${suffix}" class="text-white text-xl"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+            `;
+            
+            const playPauseBtn = document.getElementById('play-pause-btn' + suffix);
+            const muteBtn = document.getElementById('mute-btn' + suffix);
+            const fullscreenBtn = document.getElementById('fullscreen-btn' + suffix);
+            const progressBar = document.getElementById('progress-bar' + suffix);
+            
+            playPauseBtn.addEventListener('click', () => {
+                const state = player.getPlayerState();
+                if (state === YT.PlayerState.PLAYING) player.pauseVideo();
+                else player.playVideo();
+            });
 
-        muteBtn.addEventListener('click', () => {
-            if (player.isMuted()) {
-                player.unMute();
-                muteBtn.innerHTML = '<i class="fas fa-volume-high"></i>';
-            } else {
-                player.mute();
-                muteBtn.innerHTML = '<i class="fas fa-volume-xmark"></i>';
-            }
-        });
-        
-        fullscreenBtn.addEventListener('click', () => {
-            const playerIframe = document.getElementById('player');
-            const playerContainer = document.getElementById('player-container');
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-            } else {
-                playerContainer.requestFullscreen();
-            }
-        });
+            muteBtn.addEventListener('click', () => {
+                if (player.isMuted()) {
+                    player.unMute();
+                    muteBtn.innerHTML = '<i class="fas fa-volume-high"></i>';
+                } else {
+                    player.mute();
+                    muteBtn.innerHTML = '<i class="fas fa-volume-xmark"></i>';
+                }
+            });
+
+            fullscreenBtn.addEventListener('click', () => {
+                if (document.fullscreenElement) document.exitFullscreen();
+                else playerContainer.requestFullscreen();
+            });
+            
+            progressBar.addEventListener('input', () => {
+                const duration = player.getDuration();
+                if (duration > 0) player.seekTo((progressBar.value / 100) * duration);
+            });
+        }
 
         function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
             const min = Math.floor(seconds / 60);
             const sec = Math.floor(seconds % 60);
-            return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+            return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
         }
 
-        function updateProgressBar() {
-            if(player && typeof player.getCurrentTime === 'function') {
+        function updateProgressBar(player, isMobile) {
+            const suffix = isMobile ? '-mobile' : '-desktop';
+            const progressBar = document.getElementById('progress-bar' + suffix);
+            const currentTimeEl = document.getElementById('current-time' + suffix);
+            if (player && typeof player.getCurrentTime === 'function') {
                 const currentTime = player.getCurrentTime();
                 const duration = player.getDuration();
-                if (duration > 0) {
-                    progressBar.value = (currentTime / duration) * 100;
-                }
+                if (duration > 0) progressBar.value = (currentTime / duration) * 100;
                 currentTimeEl.textContent = formatTime(currentTime);
             }
         }
 
-        function updateDuration() {
-             if(player && typeof player.getDuration === 'function') {
+        function updateDuration(player, isMobile) {
+            const suffix = isMobile ? '-mobile' : '-desktop';
+            const progressBar = document.getElementById('progress-bar' + suffix);
+            const durationEl = document.getElementById('duration' + suffix);
+            if (player && typeof player.getDuration === 'function') {
                 const duration = player.getDuration();
-                durationEl.textContent = formatTime(duration);
-                progressBar.max = 100;
-             }
+                if (duration > 0) {
+                    durationEl.textContent = formatTime(duration);
+                    progressBar.max = 100;
+                }
+            }
         }
-
-        progressBar.addEventListener('input', () => {
-            const duration = player.getDuration();
-            const seekTime = (progressBar.value / 100) * duration;
-            player.seekTo(seekTime);
-        });
         
-        // Iniciar tudo quando a página carregar
-        document.addEventListener('DOMContentLoaded', function() {
-            updateSessionInfo();
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSessionInfo(true);
+            updateSessionInfo(false);
         });
-
     </script>
 </body>
 </html>
