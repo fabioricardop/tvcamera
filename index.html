@@ -3,471 +3,681 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Câmara Embu das Artes</title>
+    <title>TV Câmara Embu das Artes - Transmissão Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome para ícones do player -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* Estilo customizado para o tema PRETO e DOURADO */
-        body {
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
             font-family: 'Inter', sans-serif;
-            background-color: #000000; /* Fundo PRETO como solicitado */
-            color: #e5e7eb; /* Cinza claro para texto */
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
         }
-        /* Animação para o indicador de AO VIVO */
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.05);
-                opacity: 0.8;
-            }
+        
+        /* Animações */
+        @keyframes pulse-live {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
+            50% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
         }
-        .animate-pulse-live {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
         }
-        /* Scrollbar customizada para o tema escuro */
-        ::-webkit-scrollbar {
-            width: 10px;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        ::-webkit-scrollbar-track {
-            background: #111827; /* Cinza bem escuro */
+        
+        .animate-pulse-live { animation: pulse-live 2s infinite; }
+        .animate-fadeInUp { animation: fadeInUp 0.6s ease-out forwards; }
+        
+        /* Gradientes */
+        .gradient-gold {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
         }
-        ::-webkit-scrollbar-thumb {
-            background-color: #374151; /* Cinza médio */
-            border-radius: 10px;
-            border: 2px solid #111827;
+        .gradient-overlay {
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background-color: #4b5563;
-        }
-        /* Estilo para os cards de vídeo */
+        
+        /* Cards */
         .video-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .video-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        /* --- ESTILOS DO PLAYER CUSTOMIZADO --- */
-        .player-container {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            overflow: hidden;
         }
-        .custom-controls {
+        .video-card::before {
+            content: '';
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 10px;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            visibility: hidden;
-        }
-        .player-container:hover .custom-controls {
-            opacity: 1;
-            visibility: visible;
-        }
-        .progress-bar {
-            -webkit-appearance: none;
-            appearance: none;
+            top: 0;
+            left: -100%;
             width: 100%;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            outline: none;
-            border-radius: 5px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.2), transparent);
+            transition: left 0.5s;
         }
-        .progress-bar::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 15px;
-            height: 15px;
-            background: #fbbf24; /* Dourado */
-            border-radius: 50%;
-            cursor: pointer;
+        .video-card:hover::before { left: 100%; }
+        .video-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(251, 191, 36, 0.3);
         }
-        .progress-bar::-moz-range-thumb {
-            width: 15px;
-            height: 15px;
-            background: #fbbf24;
-            border-radius: 50%;
-            cursor: pointer;
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, #fbbf24, #f59e0b);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: #fbbf24; }
+        
+        /* Hero Background */
+        .hero-bg {
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(251, 191, 36, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
+                linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+        
+        /* Status Badge */
+        .status-badge {
+            background: rgba(239, 68, 68, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ef4444;
+        }
+        
+        /* Glass Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Tabs */
+        .tab-active {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
         }
     </style>
 </head>
-<body class="bg-black">
-
-    <!-- Cabeçalho de Navegação -->
-    <header class="bg-black/70 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 border-b border-gray-800">
-        <div class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
-            <!-- Logo -->
-            <div class="flex items-center space-x-2 md:space-x-3">
-                <img src="https://www.cmembu.sp.gov.br/assets/images/brasao_embu_das_artes_alpha_025.webp" alt="Brasão de Embu das Artes" class="w-10 h-10">
-                <h1 class="text-sm sm:text-base md:text-xl font-bold text-white tracking-wider uppercase">
-                    TV CÂMARA <span class="font-light text-gray-400">EMBU DAS ARTES</span>
-                </h1>
-            </div>
-
-            <!-- Navegação Desktop -->
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
-                <a href="#ao-vivo" class="hover:text-amber-400 transition-colors">Ao Vivo</a>
-                <a href="#recentes" class="hover:text-amber-400 transition-colors">Vídeos Recentes</a>
-                <a href="#sessoes" class="hover:text-amber-400 transition-colors">Sessões</a>
-                <a href="#" class="hover:text-amber-400 transition-colors">Vereadores</a>
-            </nav>
-
-            <!-- Botão Menu Mobile -->
-            <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-white focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+<body>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <img src="https://www.cmembu.sp.gov.br/assets/images/brasao_embu_das_artes_alpha_025.webp" 
+                         alt="Brasão" class="w-10 h-10 md:w-12 md:h-12">
+                    <div>
+                        <h1 class="text-lg md:text-xl lg:text-2xl font-black tracking-tight">
+                            <span class="text-white">TV</span>
+                            <span class="gradient-gold bg-clip-text text-transparent"> CÂMARA</span>
+                        </h1>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest">Embu das Artes</p>
+                    </div>
+                </div>
+                
+                <!-- Nav Desktop -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#ao-vivo" class="text-gray-300 hover:text-amber-400 transition-all font-medium">
+                        <i class="fas fa-broadcast-tower mr-2"></i>Ao Vivo
+                    </a>
+                    <a href="#programacao" class="text-gray-300 hover:text-amber-400 transition-all font-medium">
+                        <i class="far fa-calendar-alt mr-2"></i>Programação
+                    </a>
+                    <a href="#videos" class="text-gray-300 hover:text-amber-400 transition-all font-medium">
+                        <i class="fas fa-play-circle mr-2"></i>Vídeos
+                    </a>
+                    <a href="#noticias" class="text-gray-300 hover:text-amber-400 transition-all font-medium">
+                        <i class="far fa-newspaper mr-2"></i>Notícias
+                    </a>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-white text-2xl">
+                    <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
     </header>
-
-    <!-- Menu Mobile (escondido por padrão) -->
-    <div id="mobile-menu" class="hidden md:hidden fixed top-0 inset-0 bg-black/95 backdrop-blur-lg z-40 pt-24">
-        <nav class="flex flex-col items-center text-center space-y-8 text-xl">
-            <a href="#ao-vivo" class="text-gray-300 hover:text-amber-400 transition-colors" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Ao Vivo</a>
-            <a href="#recentes" class="text-gray-300 hover:text-amber-400 transition-colors" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Vídeos Recentes</a>
-            <a href="#sessoes" class="text-gray-300 hover:text-amber-400 transition-colors" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Sessões</a>
-            <a href="#" class="text-gray-300 hover:text-amber-400 transition-colors" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Vereadores</a>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden fixed inset-0 bg-black/95 z-40 pt-20">
+        <nav class="flex flex-col items-center justify-center h-full space-y-8 text-2xl">
+            <a href="#ao-vivo" class="text-gray-300 hover:text-amber-400 transition-all">Ao Vivo</a>
+            <a href="#programacao" class="text-gray-300 hover:text-amber-400 transition-all">Programação</a>
+            <a href="#videos" class="text-gray-300 hover:text-amber-400 transition-all">Vídeos</a>
+            <a href="#noticias" class="text-gray-300 hover:text-amber-400 transition-all">Notícias</a>
         </nav>
     </div>
 
-    <main class="pt-20 sm:pt-24">
-        <!-- Seção AO VIVO com layout mobile otimizado -->
-        <section id="ao-vivo" class="mb-12 md:mb-16">
-            <!-- Container para o layout Desktop -->
-            <div class="hidden lg:grid lg:grid-cols-3 lg:gap-8 lg:items-center lg:container lg:mx-auto">
-                <!-- Player de Vídeo com Controles Customizados -->
-                <div id="player-container-desktop" class="player-container lg:col-span-2 w-full aspect-video bg-gray-900 lg:rounded-lg shadow-2xl shadow-black/50 overflow-hidden">
-                    <div id="player-desktop"></div>
-                    <!-- Controles customizados -->
-                    <div id="custom-controls-desktop" class="custom-controls">
-                        <!-- Conteúdo dos controles gerado via JS -->
+    <!-- Main Content -->
+    <main class="pt-16 md:pt-20">
+        <!-- Hero Section -->
+        <section id="ao-vivo" class="hero-bg py-12 lg:py-20">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Player -->
+                    <div class="lg:col-span-2 animate-fadeInUp">
+                        <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                            <div class="aspect-video bg-black">
+                                <div id="player"></div>
+                            </div>
+                            <!-- Live Badge -->
+                            <div id="live-badge" class="hidden absolute top-4 left-4">
+                                <div class="status-badge px-4 py-2 rounded-full flex items-center space-x-2">
+                                    <span class="w-3 h-3 bg-red-500 rounded-full animate-pulse-live"></span>
+                                    <span class="text-white font-bold text-sm">AO VIVO</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Player Info -->
+                        <div class="mt-6 glass rounded-xl p-4 md:p-6">
+                            <h2 id="current-title" class="text-xl md:text-2xl font-bold text-white mb-2">Transmissão Oficial</h2>
+                            <p id="current-description" class="text-gray-400">Acompanhe as atividades da Câmara Municipal de Embu das Artes</p>
+                            <div class="mt-4 flex items-center space-x-4 text-sm text-gray-400">
+                                <span><i class="far fa-eye mr-2"></i><span id="viewers">0</span> assistindo</span>
+                                <span><i class="far fa-clock mr-2"></i>Atualizado há <span id="update-time">0</span> min</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                 <!-- Informações da Transmissão -->
-                 <div class="text-center lg:text-left">
-                    <span id="live-indicator-desktop" class="inline-block bg-red-600 px-4 py-1 rounded-md text-sm font-bold items-center space-x-2 animate-pulse-live w-fit mx-auto lg:mx-0 hidden">
-                        <svg class="w-3 h-3 inline-block" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4"/></svg>
-                        <span>AO VIVO</span>
-                    </span>
-                    <h2 id="session-title-desktop" class="text-3xl md:text-4xl font-bold mt-4 text-white">Carregando...</h2>
-                    <p id="session-description-desktop" class="text-gray-400 mt-2">Aguarde.</p>
-                    <button id="session-button-desktop" class="mt-6 bg-amber-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-amber-300 transition-all w-full sm:w-auto">
-                        Ver Pauta
-                    </button>
-                </div>
-            </div>
-
-            <!-- Container para o layout Mobile -->
-            <div class="lg:hidden">
-                <!-- Player de Vídeo de ponta a ponta -->
-                <div id="player-container-mobile" class="player-container w-full aspect-video bg-gray-900 shadow-lg shadow-black/50 overflow-hidden">
-                    <div id="player-mobile"></div>
-                     <!-- Controles customizados -->
-                     <div id="custom-controls-mobile" class="custom-controls">
-                        <!-- Conteúdo dos controles gerado via JS -->
+                    
+                    <!-- Side Panel -->
+                    <div class="animate-fadeInUp" style="animation-delay: 0.2s;">
+                        <div class="glass rounded-2xl p-4 md:p-6 lg:sticky lg:top-24">
+                            <div class="space-y-4">
+                                <div class="bg-black/30 rounded-lg p-4">
+                                    <h4 class="font-semibold text-amber-400 mb-2 flex items-center">
+                                        <i class="far fa-clock mr-2"></i>Próximos Eventos
+                                    </h4>
+                                    <div id="next-events" class="space-y-2 text-sm text-gray-300"></div>
+                                </div>
+                                
+                                <div class="bg-black/30 rounded-lg p-4">
+                                    <h4 class="font-semibold text-amber-400 mb-3 flex items-center">
+                                        <i class="fas fa-share-alt mr-2"></i>Compartilhar
+                                    </h4>
+                                    <div class="flex space-x-2">
+                                        <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-all">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </button>
+                                        <button class="flex-1 bg-sky-500 hover:bg-sky-600 text-white py-2 rounded-lg transition-all">
+                                            <i class="fab fa-twitter"></i>
+                                        </button>
+                                        <button class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition-all">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <!-- Informações abaixo do player -->
-                <div class="text-center px-6 mt-6">
-                    <span id="live-indicator-mobile" class="inline-block bg-red-600 px-4 py-1 rounded-md text-sm font-bold items-center space-x-2 animate-pulse-live w-fit mx-auto hidden">
-                        <svg class="w-3 h-3 inline-block" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4"/></svg>
-                        <span>AO VIVO</span>
-                    </span>
-                    <h2 id="session-title-mobile" class="text-3xl font-bold mt-4 text-white">Carregando...</h2>
-                    <p id="session-description-mobile" class="text-gray-400 mt-2">Aguarde.</p>
-                    <button id="session-button-mobile" class="mt-6 bg-amber-400 text-black font-bold py-3 px-6 rounded-lg hover:bg-amber-300 transition-all w-full sm:w-auto">
-                        Ver Pauta
-                    </button>
                 </div>
             </div>
         </section>
 
-        <!-- Conteúdo Principal - Carrosséis de Vídeos -->
-        <div class="container mx-auto px-6 py-8 space-y-12">
-
-            <!-- Carrossel: Adicionados Recentemente -->
-            <section id="recentes">
-                <h3 class="text-2xl font-semibold mb-6 text-white border-l-4 border-amber-400 pl-4">Vídeos Recentes</h3>
-                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                    <!-- Vídeo Card -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden video-card cursor-pointer group">
-                        <img src="https://placehold.co/400x225/111827/fcd34d?text=Saúde" alt="Thumbnail" class="w-full h-auto object-cover">
-                        <div class="p-4">
-                            <h4 class="font-semibold text-white group-hover:text-amber-400 transition-colors">Audiência Pública da Saúde</h4>
-                            <p class="text-xs text-gray-400 mt-1">07 de Outubro, 2025</p>
+        <!-- Programming Schedule -->
+        <section id="programacao" class="py-16 bg-gradient-to-b from-transparent to-black/50">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-black mb-4">
+                        <span class="text-white">Programação</span>
+                        <span class="gradient-gold bg-clip-text text-transparent"> Semanal</span>
+                    </h2>
+                    <p class="text-gray-400 md:text-lg">Confira a grade completa de transmissões</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Schedule Cards -->
+                    <div class="glass rounded-xl p-6 hover:border-amber-400 transition-all border border-transparent">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-xl">Segunda-feira</h3>
+                            <i class="fas fa-calendar-day text-amber-400 text-2xl"></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-semibold text-amber-400">09:00 - 12:00</span>
+                                    <span class="text-xs bg-blue-600 px-2 py-1 rounded">Comissão</span>
+                                </div>
+                                <p class="text-sm text-gray-300">Reunião de Comissões</p>
+                            </div>
                         </div>
                     </div>
-                    <!-- Outros cards... -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden video-card cursor-pointer group">
-                        <img src="https://placehold.co/400x225/111827/fcd34d?text=Entrevista" alt="Thumbnail" class="w-full h-auto object-cover">
-                        <div class="p-4">
-                            <h4 class="font-semibold text-white group-hover:text-amber-400 transition-colors">Programa Fala Cidadão</h4>
-                            <p class="text-xs text-gray-400 mt-1">06 de Outubro, 2025</p>
+                    
+                    <div class="glass rounded-xl p-6 hover:border-amber-400 transition-all border border-amber-400">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-xl">Quarta-feira</h3>
+                            <i class="fas fa-calendar-day text-amber-400 text-2xl"></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-semibold text-amber-400">10:00 - 14:00</span>
+                                    <span class="text-xs bg-red-600 px-2 py-1 rounded">Plenário</span>
+                                </div>
+                                <p class="text-sm text-gray-300">Sessão Ordinária</p>
+                            </div>
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-semibold text-amber-400">15:00 - 16:00</span>
+                                    <span class="text-xs bg-purple-600 px-2 py-1 rounded">Programa</span>
+                                </div>
+                                <p class="text-sm text-gray-300">Fala Cidadão</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-gray-900 rounded-lg overflow-hidden video-card cursor-pointer group">
-                        <img src="https://placehold.co/400x225/111827/fcd34d?text=Educação" alt="Thumbnail" class="w-full h-auto object-cover">
-                        <div class="p-4">
-                            <h4 class="font-semibold text-white group-hover:text-amber-400 transition-colors">Debate sobre a Educação Municipal</h4>
-                            <p class="text-xs text-gray-400 mt-1">05 de Outubro, 2025</p>
+                    
+                    <div class="glass rounded-xl p-6 hover:border-amber-400 transition-all border border-transparent">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-xl">Sexta-feira</h3>
+                            <i class="fas fa-calendar-day text-amber-400 text-2xl"></i>
                         </div>
-                    </div>
-                    <div class="bg-gray-900 rounded-lg overflow-hidden video-card cursor-pointer group">
-                        <img src="https://placehold.co/400x225/111827/fcd34d?text=Comissão" alt="Thumbnail" class="w-full h-auto object-cover">
-                        <div class="p-4">
-                            <h4 class="font-semibold text-white group-hover:text-amber-400 transition-colors">Comissão de Justiça e Redação</h4>
-                            <p class="text-xs text-gray-400 mt-1">04 de Outubro, 2025</p>
+                        <div class="space-y-3">
+                            <div class="bg-black/30 rounded-lg p-3">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-semibold text-amber-400">11:00 - 12:00</span>
+                                    <span class="text-xs bg-green-600 px-2 py-1 rounded">Audiência</span>
+                                </div>
+                                <p class="text-sm text-gray-300">Audiência Pública</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Carrossel: Sessões Plenárias -->
-            <section id="sessoes">
-                <h3 class="text-2xl font-semibold mb-6 text-white border-l-4 border-amber-400 pl-4">Sessões Plenárias na Íntegra</h3>
-                 <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                    <!-- Vídeo Card -->
-                    <div class="bg-gray-900 rounded-lg overflow-hidden video-card cursor-pointer group">
-                        <img src="https://placehold.co/400x225/1f2937/9ca3af?text=Sessão+07/10" alt="Thumbnail" class="w-full h-auto object-cover">
-                        <div class="p-4">
-                            <h4 class="font-semibold text-white group-hover:text-amber-400 transition-colors">Sessão Ordinária - 07/10</h4>
-                            <p class="text-xs text-gray-400 mt-1">Duração: 3h 45min</p>
+        <!-- Videos Section -->
+        <section id="videos" class="py-16">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-black mb-4">
+                        <span class="text-white">Acervo de</span>
+                        <span class="gradient-gold bg-clip-text text-transparent"> Vídeos</span>
+                    </h2>
+                    <p class="text-gray-400 md:text-lg">Assista às transmissões anteriores</p>
+                </div>
+                
+                <!-- Tabs -->
+                <div class="flex flex-wrap justify-center gap-3 mb-8">
+                    <button class="tab-btn tab-active px-6 py-3 rounded-full font-semibold transition-all" data-tab="sessoes">
+                        Sessões Plenárias
+                    </button>
+                    <button class="tab-btn px-6 py-3 rounded-full font-semibold bg-gray-800 hover:bg-gray-700 transition-all" data-tab="comissoes">
+                        Comissões
+                    </button>
+                    <button class="tab-btn px-6 py-3 rounded-full font-semibold bg-gray-800 hover:bg-gray-700 transition-all" data-tab="programas">
+                        Programas
+                    </button>
+                    <button class="tab-btn px-6 py-3 rounded-full font-semibold bg-gray-800 hover:bg-gray-700 transition-all" data-tab="eventos">
+                        Eventos
+                    </button>
+                </div>
+                
+                <!-- Video Grid -->
+                <div id="video-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Videos will be inserted here by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- News Section -->
+        <section id="noticias" class="py-16 bg-gradient-to-b from-black/50 to-transparent">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-black mb-4">
+                        <span class="text-white">Últimas</span>
+                        <span class="gradient-gold bg-clip-text text-transparent"> Notícias</span>
+                    </h2>
+                    <p class="text-gray-400 md:text-lg">Fique por dentro das atividades legislativas</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <article class="glass rounded-xl overflow-hidden group hover:border-amber-400 transition-all border border-transparent">
+                        <div class="h-48 bg-gradient-to-br from-amber-600 to-orange-600 relative overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-gavel text-6xl text-white/20"></i>
+                            </div>
                         </div>
-                    </div>
-                     <!-- Outros cards... -->
-                     <div class="bg-gray-900 rounded-lg overflow-hidden video-card cursor-pointer group">
-                        <img src="https://placehold.co/400x225/1f2937/9ca3af?text=Sessão+30/09" alt="Thumbnail" class="w-full h-auto object-cover">
-                        <div class="p-4">
-                            <h4 class="font-semibold text-white group-hover:text-amber-400 transition-colors">Sessão Ordinária - 30/09</h4>
-                            <p class="text-xs text-gray-400 mt-1">Duração: 4h 12min</p>
+                        <div class="p-6">
+                            <span class="text-xs text-amber-400 font-semibold">10 OUT 2025</span>
+                            <h3 class="text-xl font-bold mt-2 mb-3 group-hover:text-amber-400 transition-colors">
+                                Aprovado projeto de lei sobre mobilidade urbana
+                            </h3>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Câmara aprova medidas para melhorar transporte público na cidade...
+                            </p>
+                            <a href="#" class="text-amber-400 font-semibold text-sm hover:underline">
+                                Leia mais <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
                         </div>
-                    </div>
-                     <div class="bg-gray-900 rounded-lg overflow-hidden video-card cursor-pointer group">
-                        <img src="https://placehold.co/400x225/1f2937/9ca3af?text=Sessão+23/09" alt="Thumbnail" class="w-full h-auto object-cover">
-                        <div class="p-4">
-                            <h4 class="font-semibold text-white group-hover:text-amber-400 transition-colors">Sessão Ordinária - 23/09</h4>
-                            <p class="text-xs text-gray-400 mt-1">Duração: 3h 58min</p>
+                    </article>
+                    
+                    <article class="glass rounded-xl overflow-hidden group hover:border-amber-400 transition-all border border-transparent">
+                        <div class="h-48 bg-gradient-to-br from-blue-600 to-cyan-600 relative overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-heartbeat text-6xl text-white/20"></i>
+                            </div>
                         </div>
-                    </div>
-                     <div class="bg-gray-900 rounded-lg overflow-hidden video-card cursor-pointer group">
-                        <img src="https://placehold.co/400x225/1f2937/9ca3af?text=Extraordinária" alt="Thumbnail" class="w-full h-auto object-cover">
-                        <div class="p-4">
-                            <h4 class="font-semibold text-white group-hover:text-amber-400 transition-colors">Sessão Extraordinária</h4>
-                            <p class="text-xs text-gray-400 mt-1">Duração: 1h 30min</p>
+                        <div class="p-6">
+                            <span class="text-xs text-amber-400 font-semibold">08 OUT 2025</span>
+                            <h3 class="text-xl font-bold mt-2 mb-3 group-hover:text-amber-400 transition-colors">
+                                Audiência pública debate saúde municipal
+                            </h3>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Reunião aberta ao público discutiu melhorias no sistema de saúde...
+                            </p>
+                            <a href="#" class="text-amber-400 font-semibold text-sm hover:underline">
+                                Leia mais <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
                         </div>
+                    </article>
+                    
+                    <article class="glass rounded-xl p-6 hover:border-amber-400 transition-all border border-transparent">
+                        <div class="h-48 bg-gradient-to-br from-green-600 to-emerald-600 relative overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-leaf text-6xl text-white/20"></i>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-amber-400 font-semibold">05 OUT 2025</span>
+                            <h3 class="text-xl font-bold mt-2 mb-3 group-hover:text-amber-400 transition-colors">
+                                Nova lei ambiental protege áreas verdes
+                            </h3>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Legislação estabelece proteção adicional para parques municipais...
+                            </p>
+                            <a href="#" class="text-amber-400 font-semibold text-sm hover:underline">
+                                Leia mais <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter -->
+        <section class="py-16">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="gradient-gold rounded-2xl p-8 lg:p-12 text-center">
+                    <i class="fas fa-bell text-5xl text-black/20 mb-4"></i>
+                    <h2 class="text-3xl font-black text-black mb-4">Receba Notificações</h2>
+                    <p class="text-black/80 mb-6 max-w-2xl mx-auto">
+                        Cadastre-se para receber alertas quando houver transmissões ao vivo
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                        <input type="email" placeholder="Seu melhor e-mail" 
+                               class="flex-1 px-6 py-3 rounded-full bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black">
+                        <button class="px-8 py-3 bg-black text-white rounded-full font-bold hover:bg-gray-900 transition-all">
+                            Inscrever-se
+                        </button>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-black border-t border-gray-800 mt-16">
-        <div class="container mx-auto px-6 py-8 text-center text-gray-400 text-sm">
-            <p>&copy; 2025 Câmara Municipal de Embu das Artes. Todos os direitos reservados.</p>
-            <p class="mt-2">Largo Vinte e Um de Abril, 109 - Centro, Embu das Artes/SP</p>
-            <div class="mt-4 flex justify-center space-x-6">
-                 <a href="#" class="hover:text-amber-400 transition-colors">Site Oficial</a>
-                 <a href="#" class="hover:text-amber-400 transition-colors">Transparência</a>
-                 <a href="#" class="hover:text-amber-400 transition-colors">Contato</a>
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800 py-12">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="font-bold text-lg mb-4 gradient-gold bg-clip-text text-transparent">TV Câmara</h4>
+                    <p class="text-gray-400 text-sm">
+                        Transmissão oficial da Câmara Municipal de Embu das Artes
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Links Rápidos</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-amber-400 transition-colors">Portal da Câmara</a></li>
+                        <li><a href="#" class="hover:text-amber-400 transition-colors">Legislação</a></li>
+                        <li><a href="#" class="hover:text-amber-400 transition-colors">Vereadores</a></li>
+                        <li><a href="#" class="hover:text-amber-400 transition-colors">Transparência</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contato</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><i class="fas fa-phone mr-2"></i>(11) 4785-1234</li>
+                        <li><i class="fas fa-envelope mr-2"></i>contato@cmembu.sp.gov.br</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>Embu das Artes - SP</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Redes Sociais</h4>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-amber-400 rounded-full flex items-center justify-center transition-all">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-amber-400 rounded-full flex items-center justify-center transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-amber-400 rounded-full flex items-center justify-center transition-all">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
+                <p>&copy; 2025 Câmara Municipal de Embu das Artes. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
-    
-    <!-- API do YouTube e Script do Player -->
+
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        // --- LÓGICA DO MENU MOBILE ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
+        mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
 
-        // --- LÓGICA DO CONTEÚDO DINÂMICO ---
-        function updateSessionInfo(isMobile) {
+        // Global state variable
+        let isLiveNow = false;
+
+        // Schedule Data
+        const schedule = [
+            // UPDATED: Added a Sunday event to match the current time and show the 'live' state.
+            { day: 0, start: 10, end: 13, title: 'Sessão Solene Especial', type: 'Evento' },
+            { day: 1, start: 9, end: 12, title: 'Reunião de Comissões', type: 'Comissão' },
+            { day: 3, start: 10, end: 14, title: 'Sessão Ordinária', type: 'Plenário' },
+            { day: 3, start: 15, end: 16, title: 'Programa Fala Cidadão', type: 'Programa' },
+            { day: 5, start: 11, end: 12, title: 'Audiência Pública', type: 'Audiência' }
+        ];
+
+        // Videos Data
+        const videosData = {
+            sessoes: [
+                { videoId: 'VIDEO_ID_SESSAO_1', title: 'Sessão Ordinária - 07/10/2025', duration: '3h 45min', date: '07 Out 2025' },
+                { videoId: 'VIDEO_ID_SESSAO_2', title: 'Sessão Ordinária - 02/10/2025', duration: '4h 12min', date: '02 Out 2025' },
+                { videoId: 'VIDEO_ID_SESSAO_3', title: 'Sessão Extraordinária - 28/09/2025', duration: '2h 30min', date: '28 Set 2025' },
+                { videoId: 'VIDEO_ID_SESSAO_4', title: 'Sessão Ordinária - 25/09/2025', duration: '3h 58min', date: '25 Set 2025' }
+            ],
+            comissoes: [
+                { videoId: 'VIDEO_ID_COMISSAO_1', title: 'Comissão de Finanças - 06/10/2025', duration: '2h 15min', date: '06 Out 2025' },
+                { videoId: 'VIDEO_ID_COMISSAO_2', title: 'Comissão de Obras - 29/09/2025', duration: '1h 45min', date: '29 Set 2025' }
+            ],
+            programas: [
+                { videoId: 'VIDEO_ID_PROGRAMA_1', title: 'Fala Cidadão - Ep. 42', duration: '58min', date: '04 Out 2025' },
+                { videoId: 'VIDEO_ID_PROGRAMA_2', title: 'Fala Cidadão - Ep. 41', duration: '1h 05min', date: '27 Set 2025' }
+            ],
+            eventos: [
+                { videoId: 'VIDEO_ID_EVENTO_1', title: 'Audiência Pública da Saúde', duration: '2h 20min', date: '05 Out 2025' },
+                { videoId: 'VIDEO_ID_EVENTO_2', title: 'Seminário de Educação', duration: '3h 10min', date: '01 Out 2025' }
+            ]
+        };
+
+        // Update Status
+        function updateStatus() {
             const now = new Date();
-            const dayOfWeek = now.getDay();
-            const hour = now.getHours();
+            const currentDay = now.getDay();
+            const currentHour = now.getHours() + now.getMinutes() / 60;
+            let currentProgram = null;
 
-            const suffix = isMobile ? '-mobile' : '-desktop';
-            const titleEl = document.getElementById('session-title' + suffix);
-            const descEl = document.getElementById('session-description' + suffix);
-            const buttonEl = document.getElementById('session-button' + suffix);
-            const liveIndicator = document.getElementById('live-indicator' + suffix);
-            
-            const isSessionDay = dayOfWeek === 3;
-            const isSessionTime = hour >= 10 && hour < 14;
-
-            if (isSessionDay && isSessionTime) {
-                liveIndicator.classList.remove('hidden');
-                liveIndicator.classList.add('inline-flex');
-                titleEl.textContent = 'Sessão Plenária';
-                descEl.textContent = 'Acompanhe a discussão e votação de projetos importantes para a nossa cidade.';
-                buttonEl.textContent = 'Ver Pauta do Dia';
-            } else if (isSessionDay && hour >= 8 && hour < 10) {
-                liveIndicator.classList.add('hidden');
-                titleEl.textContent = 'A Seguir: Sessão Plenária';
-                descEl.textContent = 'A transmissão ao vivo começará em breve, a partir das 10:00.';
-                buttonEl.textContent = 'Ver Pauta do Dia';
-            } else {
-                liveIndicator.classList.add('hidden');
-                titleEl.textContent = 'Veja a Última Sessão';
-                descEl.textContent = 'Assista à gravação da última sessão plenária na íntegra quando quiser.';
-                buttonEl.textContent = 'Assistir Gravação';
-            }
-        }
-        
-        // --- LÓGICA DO PLAYER DE VÍDEO ---
-        let playerDesktop, playerMobile;
-        const videoId = 'FNSdHB0yd1c';
-        let progressIntervals = {};
-
-        function onYouTubeIframeAPIReady() {
-            playerDesktop = createPlayer('player-desktop', false);
-            playerMobile = createPlayer('player-mobile', true);
-        }
-
-        function createPlayer(playerId, isMobile) {
-            return new YT.Player(playerId, {
-                height: '100%',
-                width: '100%',
-                videoId: videoId,
-                playerVars: {
-                    'autoplay': 1, 'controls': 0, 'rel': 0, 'showinfo': 0, 
-                    'loop': 1, 'playlist': videoId, 'iv_load_policy': 3, 'mute': 1
-                },
-                events: {
-                    'onReady': (event) => onPlayerReady(event, isMobile),
-                    'onStateChange': (event) => onPlayerStateChange(event, isMobile)
+            for (const prog of schedule) {
+                if (prog.day === currentDay && currentHour >= prog.start && currentHour < prog.end) {
+                    currentProgram = prog;
+                    break;
                 }
-            });
-        }
-
-        function onPlayerReady(event, isMobile) {
-            const player = event.target;
-            setupPlayerControls(player, isMobile);
-            updateDuration(player, isMobile);
-            player.playVideo();
-        }
-
-        function onPlayerStateChange(event, isMobile) {
-            const suffix = isMobile ? '-mobile' : '-desktop';
-            const playPauseBtn = document.getElementById('play-pause-btn' + suffix);
-            clearInterval(progressIntervals[suffix]);
-
-            if (event.data === YT.PlayerState.PLAYING) {
-                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                progressIntervals[suffix] = setInterval(() => updateProgressBar(event.target, isMobile), 1000);
-            } else {
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
             }
+            
+            isLiveNow = !!currentProgram; // Update the global state
+
+            const liveBadge = document.getElementById('live-badge');
+            const currentTitle = document.getElementById('current-title');
+            const currentDescription = document.getElementById('current-description');
+            
+            const currentlyLive = !!currentProgram;
+
+            if (currentlyLive) {
+                liveBadge.classList.remove('hidden');
+                currentTitle.textContent = currentProgram.title;
+                currentDescription.textContent = `Transmissão ao vivo - ${currentProgram.type}`;
+                
+                if (player && player.loadVideoById && player.getVideoData().video_id !== CONFIG.liveVideoId) {
+                    player.loadVideoById(CONFIG.liveVideoId);
+                }
+            } else {
+                liveBadge.classList.add('hidden');
+                currentTitle.textContent = "Transmissão Oficial";
+                currentDescription.textContent = "Acompanhe as atividades da Câmara Municipal de Embu das Artes";
+                
+                if (player && player.loadVideoById && player.getVideoData().video_id !== CONFIG.offlineVideoId) {
+                    player.loadVideoById(CONFIG.offlineVideoId);
+                }
+            }
+
+            // Next Events
+            const nextEventsContainer = document.getElementById('next-events');
+            const upcomingEvents = schedule.filter(event => {
+                // Filter for events today but later, or on future days this week
+                const eventDate = new Date(now);
+                const dayDiff = (event.day + 7 - now.getDay()) % 7;
+                if (dayDiff === 0 && event.start > currentHour) {
+                    return true;
+                }
+                if (dayDiff > 0) {
+                    return true;
+                }
+                return false;
+            }).sort((a,b) => {
+                 const dayDiffA = (a.day + 7 - now.getDay()) % 7;
+                 const dayDiffB = (b.day + 7 - now.getDay()) % 7;
+                 if(dayDiffA !== dayDiffB) return dayDiffA - dayDiffB;
+                 return a.start - b.start;
+            });
+            
+            nextEventsContainer.innerHTML = upcomingEvents.slice(0, 3).map(event => {
+                const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+                return `
+                    <div class="flex justify-between items-center">
+                        <span>${days[event.day]} - ${String(event.start).padStart(2, '0')}:00</span>
+                        <span class="text-xs text-amber-400 text-right">${event.title}</span>
+                    </div>
+                `;
+            }).join('');
+
+            // Update viewers and time
+            document.getElementById('viewers').textContent = Math.floor(Math.random() * 500 + 100);
+            document.getElementById('update-time').textContent = Math.floor(Math.random() * 5);
         }
 
-        function setupPlayerControls(player, isMobile) {
-            const suffix = isMobile ? '-mobile' : '-desktop';
-            const playerContainer = document.getElementById('player-container' + suffix);
-            const controlsContainer = document.getElementById('custom-controls' + suffix);
-            
-            controlsContainer.innerHTML = `
-                <input type="range" id="progress-bar${suffix}" value="0" min="0" class="progress-bar">
-                <div class="flex items-center justify-between mt-2 px-2">
-                    <div class="flex items-center space-x-4">
-                        <button id="play-pause-btn${suffix}" class="text-white text-xl"><i class="fas fa-play"></i></button>
-                        <button id="mute-btn${suffix}" class="text-white text-xl"><i class="fas fa-volume-high"></i></button>
+        // Video Tabs
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const videoGrid = document.getElementById('video-grid');
+
+        function renderVideos(category) {
+            const videos = videosData[category];
+            videoGrid.innerHTML = videos.map(video => `
+                <div class="video-card glass rounded-xl overflow-hidden group cursor-pointer" data-video-id="${video.videoId || 'N5LFPpz8nrQ'}">
+                    <div class="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 relative flex items-center justify-center">
+                        <i class="fas fa-play-circle text-6xl text-amber-400 group-hover:scale-110 transition-transform"></i>
+                        <span class="absolute bottom-2 right-2 bg-black/80 px-2 py-1 rounded text-xs">${video.duration}</span>
                     </div>
-                    <div class="flex items-center space-x-2 text-white text-sm font-mono">
-                        <span id="current-time${suffix}">00:00</span>
-                        <span>/</span>
-                        <span id="duration${suffix}">00:00</span>
-                    </div>
-                    <div class="flex items-center">
-                        <button id="fullscreen-btn${suffix}" class="text-white text-xl"><i class="fas fa-expand"></i></button>
+                    <div class="p-4">
+                        <h4 class="font-semibold text-white mb-2 group-hover:text-amber-400 transition-colors line-clamp-2">
+                            ${video.title}
+                        </h4>
+                        <p class="text-xs text-gray-400">
+                            <i class="far fa-calendar mr-1"></i>${video.date}
+                        </p>
                     </div>
                 </div>
-            `;
-            
-            const playPauseBtn = document.getElementById('play-pause-btn' + suffix);
-            const muteBtn = document.getElementById('mute-btn' + suffix);
-            const fullscreenBtn = document.getElementById('fullscreen-btn' + suffix);
-            const progressBar = document.getElementById('progress-bar' + suffix);
-            
-            playPauseBtn.addEventListener('click', () => {
-                const state = player.getPlayerState();
-                if (state === YT.PlayerState.PLAYING) player.pauseVideo();
-                else player.playVideo();
-            });
+            `).join('');
+        }
 
-            muteBtn.addEventListener('click', () => {
-                if (player.isMuted()) {
-                    player.unMute();
-                    muteBtn.innerHTML = '<i class="fas fa-volume-high"></i>';
-                } else {
-                    player.mute();
-                    muteBtn.innerHTML = '<i class="fas fa-volume-xmark"></i>';
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => {
+                    b.classList.remove('tab-active');
+                    b.classList.add('bg-gray-800', 'hover:bg-gray-700');
+                });
+                btn.classList.add('tab-active');
+                btn.classList.remove('bg-gray-800', 'hover:bg-gray-700');
+                renderVideos(btn.dataset.tab);
+            });
+        });
+
+        // YouTube Player
+        let player;
+
+        // Configuration object for video IDs
+        const CONFIG = {
+            liveVideoId: 'wzu_3Tkn-kI', // ID for the live stream
+            offlineVideoId: 'N5LFPpz8nrQ', // Default video when not live
+        };
+
+        function onYouTubeIframeAPIReady() {
+            // Determines the initial video based on the live status. 
+            // updateStatus() should have been run at least once before this.
+            const initialVideoId = isLiveNow ? CONFIG.liveVideoId : CONFIG.offlineVideoId;
+
+            player = new YT.Player('player', {
+                height: '100%',
+                width: '100%',
+                videoId: initialVideoId,
+                playerVars: { 
+                    autoplay: 1,
+                    controls: 1,
+                    rel: 0,
+                    modestbranding: 1,
+                    loop: 1,
+                    playlist: initialVideoId // Ensures loop with the correct video
+                },
+                events: { 
+                    onReady: (e) => e.target.playVideo()
                 }
             });
-
-            fullscreenBtn.addEventListener('click', () => {
-                if (document.fullscreenElement) document.exitFullscreen();
-                else playerContainer.requestFullscreen();
-            });
-            
-            progressBar.addEventListener('input', () => {
-                const duration = player.getDuration();
-                if (duration > 0) player.seekTo((progressBar.value / 100) * duration);
-            });
         }
 
-        function formatTime(seconds) {
-            if (isNaN(seconds)) return "00:00";
-            const min = Math.floor(seconds / 60);
-            const sec = Math.floor(seconds % 60);
-            return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-        }
-
-        function updateProgressBar(player, isMobile) {
-            const suffix = isMobile ? '-mobile' : '-desktop';
-            const progressBar = document.getElementById('progress-bar' + suffix);
-            const currentTimeEl = document.getElementById('current-time' + suffix);
-            if (player && typeof player.getCurrentTime === 'function') {
-                const currentTime = player.getCurrentTime();
-                const duration = player.getDuration();
-                if (duration > 0) progressBar.value = (currentTime / duration) * 100;
-                currentTimeEl.textContent = formatTime(currentTime);
-            }
-        }
-
-        function updateDuration(player, isMobile) {
-            const suffix = isMobile ? '-mobile' : '-desktop';
-            const progressBar = document.getElementById('progress-bar' + suffix);
-            const durationEl = document.getElementById('duration' + suffix);
-            if (player && typeof player.getDuration === 'function') {
-                const duration = player.getDuration();
-                if (duration > 0) {
-                    durationEl.textContent = formatTime(duration);
-                    progressBar.max = 100;
-                }
-            }
-        }
-        
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            updateSessionInfo(true);
-            updateSessionInfo(false);
+            updateStatus(); // Run once on load to set isLiveNow
+            setInterval(updateStatus, 60000);
+            renderVideos('sessoes');
+
+            // Event listener for clicks on video cards
+            document.getElementById('video-grid').addEventListener('click', (event) => {
+                const videoCard = event.target.closest('.video-card');
+                if (videoCard) {
+                    const videoId = videoCard.dataset.videoId;
+                    if (videoId && player && player.loadVideoById) {
+                        player.loadVideoById(videoId);
+                        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top to see the player
+                    }
+                }
+            });
         });
     </script>
 </body>
 </html>
-
