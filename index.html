@@ -168,7 +168,7 @@
                                 <div id="player"></div>
                             </div>
                             <!-- Live Badge -->
-                            <div id="live-badge" class="hidden absolute top-4 left-4">
+                            <div id="live-badge" class="absolute top-4 left-4">
                                 <div class="status-badge px-4 py-2 rounded-full flex items-center space-x-2">
                                     <span class="w-3 h-3 bg-red-500 rounded-full animate-pulse-live"></span>
                                     <span class="text-white font-bold text-sm">AO VIVO</span>
@@ -178,12 +178,8 @@
                         
                         <!-- Player Info -->
                         <div class="mt-6 glass rounded-xl p-4 md:p-6">
-                            <h2 id="current-title" class="text-xl md:text-2xl font-bold text-white mb-2">Transmissão Oficial</h2>
-                            <p id="current-description" class="text-gray-400">Acompanhe as atividades da Câmara Municipal de Embu das Artes</p>
-                            <div class="mt-4 flex items-center space-x-4 text-sm text-gray-400">
-                                <span><i class="far fa-eye mr-2"></i><span id="viewers">0</span> assistindo</span>
-                                <span><i class="far fa-clock mr-2"></i>Atualizado há <span id="update-time">0</span> min</span>
-                            </div>
+                            <h2 id="current-title" class="text-xl md:text-2xl font-bold text-white mb-2">Transmissão Ao Vivo</h2>
+                            <p id="current-description" class="text-gray-400">Canal Oficial da Câmara Municipal de Embu das Artes</p>
                         </div>
                     </div>
                     
@@ -191,13 +187,6 @@
                     <div class="animate-fadeInUp" style="animation-delay: 0.2s;">
                         <div class="glass rounded-2xl p-4 md:p-6 lg:sticky lg:top-24">
                             <div class="space-y-4">
-                                <div class="bg-black/30 rounded-lg p-4">
-                                    <h4 class="font-semibold text-amber-400 mb-2 flex items-center">
-                                        <i class="far fa-clock mr-2"></i>Próximos Eventos
-                                    </h4>
-                                    <div id="next-events" class="space-y-2 text-sm text-gray-300"></div>
-                                </div>
-                                
                                 <div class="bg-black/30 rounded-lg p-4">
                                     <h4 class="font-semibold text-amber-400 mb-3 flex items-center">
                                         <i class="fas fa-share-alt mr-2"></i>Compartilhar
@@ -482,19 +471,6 @@
             link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
         });
 
-        // Global state variable
-        let isLiveNow = false;
-
-        // Schedule Data
-        const schedule = [
-            // UPDATED: Added a Sunday event to match the current time and show the 'live' state.
-            { day: 0, start: 10, end: 13, title: 'Sessão Solene Especial', type: 'Evento' },
-            { day: 1, start: 9, end: 12, title: 'Reunião de Comissões', type: 'Comissão' },
-            { day: 3, start: 10, end: 14, title: 'Sessão Ordinária', type: 'Plenário' },
-            { day: 3, start: 15, end: 16, title: 'Programa Fala Cidadão', type: 'Programa' },
-            { day: 5, start: 11, end: 12, title: 'Audiência Pública', type: 'Audiência' }
-        ];
-
         // Videos Data
         const videosData = {
             sessoes: [
@@ -516,81 +492,6 @@
                 { videoId: 'VIDEO_ID_EVENTO_2', title: 'Seminário de Educação', duration: '3h 10min', date: '01 Out 2025' }
             ]
         };
-
-        // Update Status
-        function updateStatus() {
-            const now = new Date();
-            const currentDay = now.getDay();
-            const currentHour = now.getHours() + now.getMinutes() / 60;
-            let currentProgram = null;
-
-            for (const prog of schedule) {
-                if (prog.day === currentDay && currentHour >= prog.start && currentHour < prog.end) {
-                    currentProgram = prog;
-                    break;
-                }
-            }
-            
-            isLiveNow = !!currentProgram; // Update the global state
-
-            const liveBadge = document.getElementById('live-badge');
-            const currentTitle = document.getElementById('current-title');
-            const currentDescription = document.getElementById('current-description');
-            
-            const currentlyLive = !!currentProgram;
-
-            if (currentlyLive) {
-                liveBadge.classList.remove('hidden');
-                currentTitle.textContent = currentProgram.title;
-                currentDescription.textContent = `Transmissão ao vivo - ${currentProgram.type}`;
-                
-                if (player && player.loadVideoById && player.getVideoData().video_id !== CONFIG.liveVideoId) {
-                    player.loadVideoById(CONFIG.liveVideoId);
-                }
-            } else {
-                liveBadge.classList.add('hidden');
-                currentTitle.textContent = "Transmissão Oficial";
-                currentDescription.textContent = "Acompanhe as atividades da Câmara Municipal de Embu das Artes";
-                
-                if (player && player.loadVideoById && player.getVideoData().video_id !== CONFIG.offlineVideoId) {
-                    player.loadVideoById(CONFIG.offlineVideoId);
-                }
-            }
-
-            // Next Events
-            const nextEventsContainer = document.getElementById('next-events');
-            const upcomingEvents = schedule.filter(event => {
-                // Filter for events today but later, or on future days this week
-                const eventDate = new Date(now);
-                const dayDiff = (event.day + 7 - now.getDay()) % 7;
-                if (dayDiff === 0 && event.start > currentHour) {
-                    return true;
-                }
-                if (dayDiff > 0) {
-                    return true;
-                }
-                return false;
-            }).sort((a,b) => {
-                 const dayDiffA = (a.day + 7 - now.getDay()) % 7;
-                 const dayDiffB = (b.day + 7 - now.getDay()) % 7;
-                 if(dayDiffA !== dayDiffB) return dayDiffA - dayDiffB;
-                 return a.start - b.start;
-            });
-            
-            nextEventsContainer.innerHTML = upcomingEvents.slice(0, 3).map(event => {
-                const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-                return `
-                    <div class="flex justify-between items-center">
-                        <span>${days[event.day]} - ${String(event.start).padStart(2, '0')}:00</span>
-                        <span class="text-xs text-amber-400 text-right">${event.title}</span>
-                    </div>
-                `;
-            }).join('');
-
-            // Update viewers and time
-            document.getElementById('viewers').textContent = Math.floor(Math.random() * 500 + 100);
-            document.getElementById('update-time').textContent = Math.floor(Math.random() * 5);
-        }
 
         // Video Tabs
         const tabBtns = document.querySelectorAll('.tab-btn');
@@ -634,25 +535,20 @@
         // Configuration object for video IDs
         const CONFIG = {
             liveVideoId: 'wzu_3Tkn-kI', // ID for the live stream
-            offlineVideoId: 'N5LFPpz8nrQ', // Default video when not live
         };
 
         function onYouTubeIframeAPIReady() {
-            // Determines the initial video based on the live status. 
-            // updateStatus() should have been run at least once before this.
-            const initialVideoId = isLiveNow ? CONFIG.liveVideoId : CONFIG.offlineVideoId;
-
             player = new YT.Player('player', {
                 height: '100%',
                 width: '100%',
-                videoId: initialVideoId,
+                videoId: CONFIG.liveVideoId,
                 playerVars: { 
                     autoplay: 1,
                     controls: 1,
                     rel: 0,
                     modestbranding: 1,
                     loop: 1,
-                    playlist: initialVideoId // Ensures loop with the correct video
+                    playlist: CONFIG.liveVideoId // Ensures loop with the correct video
                 },
                 events: { 
                     onReady: (e) => e.target.playVideo()
@@ -662,8 +558,6 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            updateStatus(); // Run once on load to set isLiveNow
-            setInterval(updateStatus, 60000);
             renderVideos('sessoes');
 
             // Event listener for clicks on video cards
@@ -681,3 +575,4 @@
     </script>
 </body>
 </html>
+
